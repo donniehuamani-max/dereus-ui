@@ -29,3 +29,19 @@ export const scaleIn: Variants = {
 }
 
 export const viewport = { once: true, amount: 0.25 } as const
+
+export const easeInOutQuint: Transition['ease'] = [0.83, 0, 0.17, 1]
+
+export const fadeSlide: Variants = {
+  hidden: { opacity: 0, x: 18 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.45, ease: easeOutExpo },
+  },
+  exit: {
+    opacity: 0,
+    x: -18,
+    transition: { duration: 0.3, ease: easeOutExpo },
+  },
+}

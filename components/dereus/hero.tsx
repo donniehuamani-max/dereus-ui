@@ -23,9 +23,9 @@ export function Hero() {
           className="glass mb-7 inline-flex items-center gap-2 rounded-full border border-border/70 py-1.5 pl-2 pr-4 text-sm"
         >
           <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
-            <Sparkles className="size-3" /> Nuevo
+            <Sparkles className="size-3" /> v2.0.0
           </span>
-          <span className="text-muted-foreground">Base cinematográfica para cualquier frontend</span>
+          <span className="text-muted-foreground">Intro cinemática + Docs funcionales</span>
         </motion.a>
 
         <motion.h1
@@ -40,7 +40,8 @@ export function Hero() {
           className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg"
         >
           Una plantilla hermosa, compacta y llena de movimiento. Bordes redondos por todas partes,
-          transiciones cinemáticas y un esqueleto de componentes listo para tu próximo proyecto.
+          transiciones cinemáticas, documentación funcional y un esqueleto de componentes listo para
+          tu próximo proyecto.
         </motion.p>
 
         <motion.div variants={riseIn} className="mt-9 flex flex-wrap items-center justify-center gap-3">

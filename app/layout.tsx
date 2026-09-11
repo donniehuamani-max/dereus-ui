@@ -7,9 +7,9 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const grotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-grotesk' })
 
 export const metadata: Metadata = {
-  title: 'Dereus UI v1.0.0 — The cinematic frontend base',
+  title: 'Dereus UI v2.0.0 — The cinematic frontend base',
   description:
-    'Dereus UI is a beautiful, compact and animation-first frontend template. Rounded everything, cinematic transitions, and a complete component base ready for any project.',
+    'Dereus UI v2.0.0: a beautiful, compact and animation-first frontend template. Cinematic intro, working documentation, rounded everything, and a complete component base ready for any project.',
   generator: 'v0.app',
   icons: {
     icon: [

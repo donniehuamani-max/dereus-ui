@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform, animate } from '
 import { Hexagon } from 'lucide-react'
 import { easeOutExpo, easeInOutQuint } from './motion'
 
-const words = ['Cinematic', 'Compacta', 'Redonda', 'Dereus UI']
+const words = ['Cinematic', 'Compacta', 'Redonda', 'Dereus Library']
 
 export function Intro() {
   const [done, setDone] = useState(false)
@@ -81,7 +81,7 @@ export function Intro() {
           {/* progress bar */}
           <div className="mt-10 w-56 max-w-[70vw]">
             <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
-              <span className="font-mono">v2.0.0</span>
+              <span className="font-mono">v2.1.0</span>
               <span className="font-mono tabular-nums">{display}%</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-secondary">

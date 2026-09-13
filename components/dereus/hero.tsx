@@ -23,7 +23,7 @@ export function Hero() {
           className="glass mb-7 inline-flex items-center gap-2 rounded-full border border-border/70 py-1.5 pl-2 pr-4 text-sm"
         >
           <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
-            <Sparkles className="size-3" /> v2.0.0
+            <Sparkles className="size-3" /> v2.1.0
           </span>
           <span className="text-muted-foreground">Intro cinemática + Docs funcionales</span>
         </motion.a>
@@ -32,7 +32,7 @@ export function Hero() {
           variants={riseIn}
           className="text-glow font-display text-5xl font-bold leading-[0.95] tracking-tight text-balance sm:text-7xl md:text-8xl"
         >
-          Dereus UI
+          Dereus Library
         </motion.h1>
 
         <motion.p

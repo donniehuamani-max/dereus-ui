@@ -46,7 +46,7 @@ export function FloatingNav() {
           </motion.span>
           <span className="font-display text-sm font-bold tracking-tight">Dereus</span>
           <span className="hidden rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground sm:inline">
-            v2.0.0
+            v2.1.0
           </span>
         </a>
 

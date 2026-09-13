@@ -1,8 +1,8 @@
-# Dereus Luau
+# Dereus Library
 
-**Dereus UI v2.0.0 for Roblox Luau** — a complete, animation-first UI library for scripts, tools, dashboards, admin panels, and in-game experiences.
+**Dereus Library v2.1.0 for Lua, Luau and Roblox Studio** — a complete, animation-first UI library for scripts, tools, dashboards, admin panels, and in-game experiences.
 
-> Dereus Luau is the Luau counterpart to Dereus UI: the same rounded, cinematic design language implemented natively for Roblox.
+> Dereus Library is the portable Lua and Luau toolkit behind the Dereus ecosystem: the same rounded, cinematic design language implemented natively for Roblox.
 
 ## Features
 
@@ -16,6 +16,12 @@
 - Hover, focus, press, and keyboard-friendly interaction states
 - No external dependencies; Roblox services only
 - Typed-friendly module boundaries and composable APIs
+
+## Compatibility
+
+- Lua 5.1, 5.2 and 5.3: portable core modules in `src/Portable.lua` and `src/Utils.lua`.
+- Luau and Roblox Studio: full Instance-backed window, controls, notifications and motion modules.
+- The portable core avoids Roblox globals, making it safe for CLI tools, game servers and tests.
 
 ## Installation
 
@@ -90,6 +96,11 @@ Registers a connection for automatic cleanup.
 - `ui.Components.Label(parent, theme, text, props?)`
 - `ui.Components.Button(parent, ui, text, callback, props?)`
 - `ui.Components.Input(parent, ui, placeholder, callback, props?)`
+- `ui.Components.Section(parent, theme, title)`
+- `ui.Components.Toggle(parent, ui, label, default, callback)`
+- `ui.Components.Slider(parent, ui, label, min, max, default, callback)`
+- `Dereus.Portable.new(options?)` for Lua-compatible lifecycle state
+- `Dereus.Utils.merge`, `clamp`, `map`, and `once`
 
 ### Motion
 

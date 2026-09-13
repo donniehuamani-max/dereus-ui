@@ -27,7 +27,7 @@ export function Footer() {
                 <span className="grid size-9 place-items-center rounded-full bg-primary text-primary-foreground">
                   <Hexagon className="size-5" strokeWidth={2.4} />
                 </span>
-                <span className="font-display text-lg font-bold">Dereus UI</span>
+                <span className="font-display text-lg font-bold">Dereus Library</span>
               </div>
               <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
                 La base cinematográfica, compacta y redondeada para tu próximo frontend.
@@ -63,8 +63,8 @@ export function Footer() {
           </div>
 
           <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-border/60 pt-6 text-sm text-muted-foreground sm:flex-row">
-            <span>© {new Date().getFullYear()} Dereus UI. Hecho con movimiento.</span>
-            <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium">v1.0.0</span>
+            <span>© {new Date().getFullYear()} Dereus Library. Hecho con movimiento.</span>
+            <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium">v2.1.0</span>
           </div>
         </motion.div>
       </div>

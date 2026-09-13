@@ -1,115 +1,187 @@
 # Dereus Library
 
-**Dereus Library v2.1.0 for Lua, Luau and Roblox Studio** — a complete, animation-first UI library for scripts, tools, dashboards, admin panels, and in-game experiences.
+**Dereus Library 2.7.0** es una librería open source de interfaces para Lua, Luau, Roblox Studio y hosts autorizados, diseñada alrededor de una estética compacta, animada y cinematográfica.
 
-> Dereus Library is the portable Lua and Luau toolkit behind the Dereus ecosystem: the same rounded, cinematic design language implemented natively for Roblox.
+> Dereus Library es una librería de interfaz neutral y portable: ofrece un core Lua sin dependencias de Roblox y un adaptador Luau/Roblox con ventanas, controles, temas y motion.
 
-## Features
+## Principios del proyecto
 
-- Theme tokens for background, surfaces, typography, borders, and radius
-- Lifecycle-safe `Dereus.new()` instances with `Destroy()` cleanup
-- Full `Window` and `Tab` shell API for Roblox Studio interfaces
-- Reusable `Panel`, `Stack`, `Label`, `Button`, `Input`, `Section`, `Toggle`, and `Slider` components
-- Cinematic motion helpers: enter, press, tween, spring-like easing
-- Built for authorized Studio experiences, tools, plugins, dashboards, and admin interfaces
-- Auto-dismissing notifications
-- Hover, focus, press, and keyboard-friendly interaction states
-- No external dependencies; Roblox services only
-- Typed-friendly module boundaries and composable APIs
+Dereus prioriza cinco principios: API composable, limpieza automática, animación consistente, compatibilidad con Roblox Studio y responsabilidad del integrador. La librería no decide qué hace el código que la consume; el creador de la experiencia debe revisar sus permisos, seguridad, RemoteEvents, moderación y cumplimiento de las reglas aplicables.
 
-## Compatibility
+## Compatibilidad e instalación
 
-- Lua 5.1, 5.2 and 5.3: portable core modules in `src/Portable.lua` and `src/Utils.lua`.
-- Luau and Roblox Studio: full Instance-backed window, controls, notifications and motion modules.
-- The portable core avoids Roblox globals, making it safe for CLI tools, game servers and tests.
+- Lua 5.1, 5.2 y 5.3: core portable en `src/Portable.lua` y `src/Utils.lua`.
+- Luau y Roblox Studio: ventanas, controles, notificaciones, motion y temas basados en Instances.
+- El core portable no depende de globals de Roblox y es apto para herramientas, servidores y tests.
 
-## Installation
+## Instalación
 
-Copy `src` into `ReplicatedStorage.Packages.Dereus` using your preferred Roblox workflow (Rojo, Wally, or manual package sync).
+Copia `src` a `ReplicatedStorage.Packages.Dereus` mediante Rojo, Wally o sincronización manual. En un `LocalScript`:
 
 ```lua
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Dereus = require(ReplicatedStorage.Packages.Dereus)
-local ui = Dereus.new({ Name = "MyInterface" })
+
+local ui = Dereus.new({
+    Name = "MyInterface",
+    IgnoreGuiInset = false,
+    DisplayOrder = 20,
+})
 ```
 
-## Quick start
+Para hosts que montan la interfaz en un contenedor propio, usa `Parent`. También puedes proporcionar un `ParentResolver` controlado por tu aplicación; Dereus no depende de nombres ni APIs privadas de terceros:
 
 ```lua
-local panel = ui.Components.Panel(ui.Gui, ui.Theme, {
-    Size = UDim2.fromOffset(360, 240),
+local ui = Dereus.new({
+    Parent = myAuthorizedGuiContainer,
+    ParentTimeout = 5,
 })
-panel.Position = UDim2.new(0.5, -180, 0.5, -120)
-
-ui.Components.Label(panel, ui.Theme, "Command Center", { TextSize = 22 })
-ui.Components.Button(panel, ui, "Run", function()
-    ui.Notify.new(ui, "Done", "Your command finished successfully.")
-end)
-
-ui.Motion.Enter(panel)
 ```
 
-## Window API
+La librería no tiene dependencias externas: utiliza servicios y clases nativos de Roblox.
+
+Puedes cambiar la identidad visual sin reescribir componentes:
+
+```lua
+local ui = Dereus.new({
+    Theme = Dereus.Presets.Graphite,
+})
+```
+
+Para un host con contenedor propio, utiliza un adaptador neutral:
+
+```lua
+local adapter = Dereus.Compatibility.Adapter({
+    Name = "MyHost",
+    Parent = myGuiContainer,
+    Capabilities = { SupportsInput = true },
+})
+local ok, parent = ui.Host.Mount(ui.Gui, adapter, player)
+```
+
+## Inicio rápido
 
 ```lua
 local window = ui.Window.new(ui, {
-    Title = "Dereus Control Center",
+    Title = "Control Center",
+    Subtitle = "Herramientas de la experiencia",
     Size = UDim2.fromOffset(620, 440),
 })
 
 local home = window:AddTab("Home", "⌂")
-ui.Components.Section(home.Page, ui.Theme, "Actions")
-ui.Components.Button(home.Page, ui, "Launch", function()
-    print("Authorized action")
+ui.Components.Section(home.Page, ui.Theme, "Acciones")
+ui.Components.Button(home.Page, ui, "Ejecutar acción autorizada", function()
+    ui.Notify.new(ui, "Completado", "La acción terminó correctamente.")
 end)
-ui.Components.Toggle(home.Page, ui, "Enabled", true, function(enabled)
-    print("Enabled:", enabled)
+ui.Components.Toggle(home.Page, ui, "Modo compacto", false, function(enabled)
+    print("Compact mode:", enabled)
 end)
-ui.Components.Slider(home.Page, ui, "Opacity", 0, 100, 80, function(value)
-    print("Opacity:", value)
-end)
+ui.Motion.Enter(window.Root, { Offset = 30, Duration = 0.55 })
 ```
 
-`Window:AddTab()` creates an isolated scrolling page and tab button. Use `window:SelectTab(tab)` to switch pages programmatically. Every connection and instance is registered with the parent `ui` instance, so `ui:Destroy()` cleans up the complete interface safely.
+## API pública
 
-## Architecture
+| API | Descripción |
+|---|---|
+| `Dereus.new(options?)` | Crea un `ScreenGui` aislado y un registro de limpieza. |
+| `ui:Register(instance)` | Registra una instancia para destruirla al cerrar la UI. |
+| `ui:Connect(signal, callback)` | Registra una conexión para desconexión automática. |
+| `ui:Tween(instance, properties, duration, style, direction)` | Tween centralizado con valores seguros. |
+| `ui:Destroy()` | Desconecta señales, destruye instancias y elimina la interfaz. |
+| `ui.Window.new(ui, options?)` | Crea una ventana con pestañas. |
+| `ui.Components.*` | Componentes `Panel`, `Stack`, `Label`, `Button`, `Input`, `Toggle` y `Slider`. |
+| `ui.Motion.*` | Entrada, salida, press, stagger, secuencias, pulso, respiración, shake y hover. |
+| `ui.Notify.new(ui, title, message, options?)` | Notificación apilable y auto-cerrable. |
+| `ui.Style.Surface(instance, theme, options?)` | Superficie con borde, radio, gradiente y sombra opcionales. |
+| `ui.Layout.*` | Escala, restricciones responsive, padding y centrado. |
+| `ui.Host.*` | Resolución y montaje mediante un adaptador de contenedor GUI. |
+| `ui.Cinematic.new(ui)` | Secuencias de animación con espera, reproducción asíncrona y skip. |
+| `ui.Compatibility.*` | Detección de capacidades, llamadas protegidas y adaptadores configurables. |
+| `ui.Presets.*` | Temas Midnight, Graphite, Light y mezcla de overrides. |
+| `ui.Diagnostics.*` | Diagnóstico de montaje, llamadas protegidas, clamp y mensajes de error. |
+| `ui.Registry.*` | Registro central de instancias, conexiones y tareas cancelables. |
+| `ui.Store.*` | Estado observable para organizar la lógica de la interfaz. |
 
-- `Dereus.lua` owns the UI root, theme, TweenService wrapper, connection registry, and cleanup.
-- `Components.lua` contains small composable primitives. Components receive the UI instance so they share theme and lifecycle behavior.
-- `Motion.lua` keeps animation behavior consistent and avoids duplicated TweenInfo setup.
-- `Notify.lua` provides transient feedback without coupling notifications to a specific screen.
+## Motion y cinemáticas de interfaz
 
-## API
+`Motion.Enter` y `Motion.Exit` combinan desplazamiento y transparencia cuando la clase lo permite. `Motion.Stagger` introduce elementos en cascada; `Motion.Sequence` permite organizar una secuencia lineal de tweens y pausas.
 
-### `Dereus.new(options?)`
-Creates a ScreenGui and returns an isolated UI instance. `options.Name` changes the ScreenGui name and `options.Theme` overrides theme tokens.
+### API portable
 
-### `ui:Destroy()`
-Disconnects registered signals, destroys registered instances, and removes the ScreenGui.
+- `Dereus.Portable.new(options?)` crea estado de ciclo de vida compatible con Lua.
+- `Dereus.Utils.merge`, `clamp`, `map` y `once` son utilidades sin dependencias.
 
-### `ui:Connect(signal, callback)`
-Registers a connection for automatic cleanup.
+### Componentes
 
-### Components
-
-- `ui.Components.Panel(parent, theme, props)`
-- `ui.Components.Stack(parent, props)`
-- `ui.Components.Label(parent, theme, text, props?)`
-- `ui.Components.Button(parent, ui, text, callback, props?)`
-- `ui.Components.Input(parent, ui, placeholder, callback, props?)`
-- `ui.Components.Section(parent, theme, title)`
-- `ui.Components.Toggle(parent, ui, label, default, callback)`
-- `ui.Components.Slider(parent, ui, label, min, max, default, callback)`
-- `Dereus.Portable.new(options?)` for Lua-compatible lifecycle state
-- `Dereus.Utils.merge`, `clamp`, `map`, and `once`
+- `ui.Components.Panel`, `Stack`, `Label`, `Button`, `Input`, `Section`, `Toggle` y `Slider`.
+- `ui.Window.new(ui, options?)` crea ventanas con tabs y páginas aisladas.
 
 ### Motion
 
+`Motion.Enter`, `Exit`, `Stagger` y `Sequence` organizan transiciones y cinemáticas con cleanup centralizado.
+
 ```lua
-ui.Motion.Play(instance, { Position = target }, { Duration = 0.6 })
-ui.Motion.Enter(panel, { Offset = 28, Duration = 0.55 })
+ui.Motion.Stagger({ card1, card2, card3 }, {
+    Offset = 18,
+    Duration = 0.4,
+    Stagger = 0.08,
+})
+
+local intro = ui.Motion.Sequence({
+    { Instance = logo, Properties = { ImageTransparency = 0 }, Options = { Duration = 0.5 } },
+    { Wait = 0.25 },
+    { Instance = headline, Properties = { TextTransparency = 0 }, Options = { Duration = 0.35 } },
+})
+intro:Play()
 ```
 
-## Recommended project layout
+Para escenas más largas:
+
+```lua
+local scene = ui.Cinematic.new(ui)
+scene:Add(logo, { ImageTransparency = 0 }, { Duration = 0.5 })
+scene:Wait(0.2)
+scene:Add(title, { TextTransparency = 0 }, { Duration = 0.35 })
+scene:PlayAsync(function(wasSkipped)
+    print("Cinematic complete", wasSkipped)
+end)
+```
+
+## Apariencia profesional
+
+El módulo `Style` centraliza los detalles visuales para que una UI mantenga jerarquía y consistencia:
+
+```lua
+ui.Style.Surface(panel, ui.Theme, {
+    Shadow = true,
+    Gradient = { ui.Theme.Surface, ui.Theme.Background },
+    BorderTransparency = 0.25,
+})
+```
+
+Usa el color primario para acciones y estados activos, `Muted` para información secundaria y `Danger` únicamente para acciones destructivas o errores. Evita saturar una pantalla con gradientes, sombras o animaciones simultáneas.
+
+Para una cinemática de menú, mantén las transiciones cortas, no bloquees la interacción más tiempo del necesario y ofrece siempre un método de cierre o skip. La librería anima la interfaz; la lógica de juego y la autorización deben permanecer separadas.
+
+## Compatibilidad y buenas prácticas
+
+La matriz de montaje completa está en [`docs/COMPATIBILITY.md`](./docs/COMPATIBILITY.md).
+
+Dereus está pensada para `LocalScript` y `ScreenGui` en Roblox Studio. Usa `Activated` en botones para cubrir mouse, touch y gamepad cuando Roblox lo soporte. El slider admite mouse y touch. Para experiencias con respawn, decide explícitamente si `ResetOnSpawn` debe ser `true` o `false`. Para plugins de Studio, proporciona un `Parent` apropiado en `Dereus.new` en vez de asumir `PlayerGui`.
+
+Mantén los cambios de estado en el servidor cuando afecten economía, permisos, progreso o seguridad. Una UI nunca debe ser la autoridad sobre esas decisiones. Valida nuevamente los datos recibidos por RemoteEvents.
+
+## Limpieza
+
+Siempre conserva la instancia y destrúyela cuando reemplaces la pantalla:
+
+```lua
+ui:Destroy()
+```
+
+Esto desconecta eventos y evita conexiones huérfanas, especialmente al cambiar de menú, respawnear o cerrar una herramienta.
+
+## Estructura recomendada
 
 ```text
 ReplicatedStorage/
@@ -119,15 +191,73 @@ ReplicatedStorage/
       Components.lua
       Motion.lua
       Notify.lua
+      Window.lua
+      Style.lua
+      Layout.lua
+      Host.lua
+      Cinematic.lua
+      Compatibility.lua
+      Presets.lua
+      Diagnostics.lua
+      Registry.lua
+      Store.lua
       init.lua
 StarterPlayerScripts/
   Starter.client.lua
 ```
 
-## Development
+## Términos de uso y alcance
 
-Use Rojo to sync the modules into Roblox Studio. Keep UI roots local to the player and call `ui:Destroy()` when replacing a screen. Run `tests/Smoke.spec.lua` in your preferred Luau test runner.
+Dereus se distribuye bajo la licencia MIT incluida en este repositorio. Puedes usarla, modificarla, redistribuirla e incorporarla en proyectos personales, educativos o comerciales respetando esa licencia. También puedes incorporarla en proyectos de cualquier naturaleza que decidas desarrollar.
 
-## License
+El integrador es responsable de su propio código, contenido, datos, permisos, seguridad, cumplimiento de las reglas de Roblox y legislación aplicable. Dereus no reclama propiedad, control, participación, representación ni beneficio sobre los proyectos creados con la librería, sean legales o ilegales, y no se hace responsable por daños, sanciones, pérdidas, abuso, fraude, explotación, trampas, acceso no autorizado o cualquier otro uso que un tercero dé a un proyecto que la incluya. **Dereus Luau no tiene relación con las acciones, decisiones o finalidades del proyecto usuario: únicamente proporciona código de interfaz bajo licencia MIT.**
 
-MIT. See `LICENSE`.
+## Soluciones rápidas
+
+```lua
+local report = ui.Diagnostics.Check(ui)
+if not report.Ok then
+    for _, issue in ipairs(report.Issues) do warn(issue.Code, issue.Message) end
+end
+
+local ok, result = ui:Try("load-data", function()
+    return loadData()
+end, function(label, err)
+    warn(ui.Diagnostics.FormatError(label, err))
+end)
+```
+
+Problemas típicos: si no aparece la UI, revisa `Parent` o `ParentResolver`; si falla al crearla, proporciona `Player`; si una pantalla se duplica, destruye la instancia anterior con `ui:Destroy()`; si un valor se sale del rango, usa `ui:Clamp()` o `Diagnostics.Clamp()`.
+
+## Organización y logística
+
+Usa `Store` para separar el estado de la interfaz de sus componentes:
+
+```lua
+local store = ui.Store.new({ ActiveTab = "Home", Enabled = true })
+local unsubscribe = store:Subscribe(function(key, value)
+    print("changed", key, value)
+end)
+store:Set("ActiveTab", "Settings")
+```
+
+Para tareas que deben morir junto a la UI:
+
+```lua
+local thread = task.spawn(function()
+    -- trabajo de interfaz
+end)
+ui:Track(thread)
+```
+
+Cuando llamas `ui:Destroy()`, el registro central limpia conexiones, instancias y tareas rastreadas.
+
+Dereus tampoco garantiza que una versión concreta sea compatible con futuros cambios de Roblox. Las contribuciones deben incluir documentación y explicar cualquier cambio de API o comportamiento.
+
+## Contribuir
+
+Abre un issue describiendo el problema, versión de Roblox Studio, pasos para reproducirlo y resultado esperado. Los pull requests deben ser pequeños, documentados y acompañados por una prueba o ejemplo reproducible cuando corresponda.
+
+## Licencia
+
+MIT. Consulta [`LICENSE`](./LICENSE).

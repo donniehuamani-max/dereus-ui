@@ -14,11 +14,13 @@ local Registry = require(script.Registry)
 local Store = require(script.Store)
 local Portable = require(script.Portable)
 local Utils = require(script.Utils)
+local HostHelpers = require(script.HostHelpers)
 
 Dereus.Components = Components
 Dereus.Portable = Portable
 Dereus.Utils = Utils
-Dereus.Version = "2.7.0"
+Dereus.HostHelpers = HostHelpers
+Dereus.Version = "2.8.0"
 Dereus.Window = Window
 Dereus.Motion = Motion
 Dereus.Notify = Notify

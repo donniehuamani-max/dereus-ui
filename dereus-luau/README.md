@@ -1,8 +1,15 @@
 # Dereus Library
 
-**Dereus Library 2.7.0** es una librería open source de interfaces para Lua, Luau, Roblox Studio y hosts autorizados, diseñada alrededor de una estética compacta, animada y cinematográfica.
+**Dereus Library 2.8.0** es una librería open source de interfaces para Lua, Luau, Roblox Studio y hosts autorizados, diseñada alrededor de una estética compacta, animada y cinematográfica.
 
 > Dereus Library es una librería de interfaz neutral y portable: ofrece un core Lua sin dependencias de Roblox y un adaptador Luau/Roblox con ventanas, controles, temas y motion.
+
+## 2.8.0
+
+- Más compatibilidad entre Lua, LuaJIT, Luau y Roblox Studio.
+- Resolución de host explícita con `HostHelpers` sin asumir globals de Roblox.
+- API portable separada del adaptador visual para facilitar tests y servidores.
+- Cinemáticas, motion y cleanup siguen siendo cancelables y aislados por instancia.
 
 ## Principios del proyecto
 
@@ -10,9 +17,11 @@ Dereus prioriza cinco principios: API composable, limpieza automática, animaci�
 
 ## Compatibilidad e instalación
 
-- Lua 5.1, 5.2 y 5.3: core portable en `src/Portable.lua` y `src/Utils.lua`.
+- Lua 5.1, 5.2, 5.3 y 5.4: core portable en `src/Portable.lua` y `src/Utils.lua`.
+- LuaJIT: utilidades portables sin dependencias de Roblox.
 - Luau y Roblox Studio: ventanas, controles, notificaciones, motion y temas basados en Instances.
 - El core portable no depende de globals de Roblox y es apto para herramientas, servidores y tests.
+- `HostHelpers` detecta Roblox de forma segura y resuelve contenedores proporcionados por la aplicación.
 
 ## Instalación
 

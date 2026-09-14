@@ -23,7 +23,7 @@ const topics: Topic[] = [
     label: 'Instalación',
     icon: Rocket,
     title: 'Empieza en segundos',
-    body: 'Dereus UI es un esqueleto: clona los componentes de components/dereus y compón tu página. Solo necesitas motion para las animaciones y lucide-react para los iconos.',
+    body: 'Dereus Library es un esqueleto: clona los componentes de components/dereus y compón tu página. Solo necesitas motion para las animaciones y lucide-react para los iconos.',
     lang: 'bash',
     code: `# Instala las dependencias
 pnpm add motion lucide-react

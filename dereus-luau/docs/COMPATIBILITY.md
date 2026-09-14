@@ -1,4 +1,4 @@
-# Compatibilidad de Dereus Luau 2.7.0
+# Compatibilidad de Dereus Library 2.8.0
 
 Dereus está diseñado para código Luau autorizado que crea interfaces mediante las clases y servicios públicos de Roblox. El objetivo de esta versión es que el mismo código pueda montarse en una experiencia de Roblox, una herramienta local de Studio o un host que proporcione un contenedor GUI válido, sin acoplar la librería a APIs privadas.
 
@@ -42,7 +42,7 @@ Para mantener una integración grande ordenada, usa `Registry` para recursos y `
 
 Conserva una única instancia por pantalla y llama `ui:Destroy()` antes de montar un reemplazo. No mantengas conexiones externas a instancias destruidas. La librería registra la mayoría de conexiones mediante `ui:Connect`; los componentes nuevos deben seguir el mismo patrón.
 
-Dereus no controla, dirige, participa, representa ni se beneficia de los proyectos que la utilizan, sean legales o ilegales. La UI es únicamente una capa visual; el integrador es responsable de su código, decisiones, permisos y cumplimiento aplicable.
+Dereus es una capa visual para integraciones autorizadas. El integrador es responsable de su código, decisiones, permisos y cumplimiento aplicable; la librería no ofrece funciones para evadir protecciones, automatizar trampas o acceder a APIs privadas.
 
 ## Presentación
 

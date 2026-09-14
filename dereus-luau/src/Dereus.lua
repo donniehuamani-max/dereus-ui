@@ -4,7 +4,7 @@ local Registry = require(script.Registry)
 
 local Dereus = {}
 Dereus.__index = Dereus
-Dereus.Version = "2.7.0"
+Dereus.Version = "2.8.0"
 Dereus.Theme = {
     Background = Color3.fromRGB(18, 20, 29),
     Surface = Color3.fromRGB(27, 30, 42),
